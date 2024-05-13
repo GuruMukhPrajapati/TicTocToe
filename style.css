@@ -1,50 +1,58 @@
-/* Define the game board layout */
-* {
-  margin: 0;
-  padding: 0;
+body {  
+  font-family: 'Poppins', sans-serif;
+  color: #f3eff2;
+  background-image: url(bg2.jpg);
 }
 
-body {
+h1 {
   text-align: center;
-  background-image: url('/home/gurumukh/tic toc toew/bg.jpg');
-  background-size: cover; /* Cover the entire viewport */
-  background-position: center; /* Center the background image */
 }
 
-.container {
-  height: 75vh;
-  justify-content: center; /* Align horizontally */
-  align-items: center;
+#board {
+  margin-left: auto;
+  margin-right: auto;
+  width: 375px;
+  height: 375px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 5px;
+}
+
+.square {
+  width: 120px;
+  height: 120px;
+  border: 1px solid #D3D3D3;
+  background-color: #F5F5F5;
+  font-size: 40px;
   display: flex;
-}
-
-.game {
-  height: 60vmin;
-  width: 60vmin; /* Change width to make it a square */
-  display: grid; /* Change display to grid */
-  grid-template-columns: repeat(3, 1fr); /* Divide into 3 equal columns */
-  grid-template-rows: repeat(3, 1fr); /* Divide into 3 equal rows */
-  gap: 1.5vmin;
-  justify-content: center; /* Align horizontally */
-  align-items: center; /* Align vertically */
-}
-
-/* Style the individual boxes */
-.box {
-  height: 100%; /* Make each box take full height of its grid cell */
-  width: 100%; /* Make each box take full width of its grid cell */
-  border-radius: 45px;
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.30);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border:1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
-#resetBtn
-  {
-    padding: 1rem;
-    font-size: 1.25rem;
-    background-color: #191913;
-    color: #fff;
-    border-radius: 2rem;
-    border: none;
-  }
+
+
+.square:hover {
+  background-color: #FFFFE0;
+}
+
+#restartButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 40px;
+  width: 150px;
+  background-color: #FFFFFF;
+  border: 1px solid #000000;
+  border-radius: 40px;
+  font-size: 18px;
+}
+
+#restartButton:hover {
+  background-color: #000000;
+  color: #FFFFFF;
+}

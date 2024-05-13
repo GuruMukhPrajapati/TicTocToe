@@ -1,91 +1,77 @@
-let boxes = document.querySelectorAll(".box");
-let resetBtn = document.querySelector("#reset-btn");
-let newGameBtn = document.querySelector("#new-btn");
-let msgContainer = document.querySelector(".msg-container");
-let msg = document.querySelector("#msg");
+const board = document.getElementById('board');
+const squares = document.getElementsByClassName('square');
+const players = ['X', 'O'];
+let currentPlayer = players[0];
+const endMessage = document.createElement('h2');
+endMessage.textContent = `Your turn!`;
+endMessage.style.marginTop = '30px';
+endMessage.style.textAlign='center';
+board.after(endMessage);
 
-let turnO = true; //playerX, playerO
-let count = 0; //To Track Draw
-
-const winPatterns = [
-  [0, 1, 2],
-  [0, 3, 6],
-  [0, 4, 8],
-  [1, 4, 7],
-  [2, 5, 8],
-  [2, 4, 6],
-  [3, 4, 5],
-  [6, 7, 8],
+const winning_combinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
 ];
 
-const resetGame = () => {
-  turnO = true;
-  count = 0;
-  enableBoxes();
-  msgContainer.classList.add("hide");
-};
+let turnCount = 0; // Add turn count
 
-boxes.forEach((box) => {
-  box.addEventListener("click", () => {
-    if (turnO) {
-      //playerO
-      box.innerText = "O";
-      turnO = false;
-    } else {
-      //playerX
-      box.innerText = "X";
-      turnO = true;
+for(let i = 0; i < squares.length; i++){
+    squares[i].addEventListener('click', () => {
+        if(squares[i].textContent !== ''){
+            return;
+        }
+        squares[i].textContent = players[0]; // Player's turn
+        turnCount++;
+        if(checkWin(players[0])) {
+            endMessage.textContent = `Game over! You win!`;
+            return;
+        }
+        if(turnCount === 9) {
+            endMessage.textContent = `Game is tied!`;
+            return;
+        }
+        setTimeout(computerTurn, 500); // Computer's turn
+    });
+}
+
+function computerTurn() {
+    let randomSquare;
+    do {
+        randomSquare = Math.floor(Math.random() * 9);
+    } while (squares[randomSquare].textContent !== '');
+    squares[randomSquare].textContent = players[1];
+    turnCount++;
+    if(checkWin(players[1])) {
+        endMessage.textContent = `Game over! Computer wins!`;
+        return;
     }
-    box.disabled = true;
-    count++;
-
-    let isWinner = checkWinner();
-
-    if (count === 9 && !isWinner) {
-      gameDraw();
+    if(turnCount === 9) {
+        endMessage.textContent = `Game is tied!`;
+        return;
     }
-  });
-});
+}
 
-const gameDraw = () => {
-  msg.innerText = `Game was a Draw.`;
-  msgContainer.classList.remove("hide");
-  disableBoxes();
-};
-
-const disableBoxes = () => {
-  for (let box of boxes) {
-    box.disabled = true;
-  }
-};
-
-const enableBoxes = () => {
-  for (let box of boxes) {
-    box.disabled = false;
-    box.innerText = "";
-  }
-};
-
-const showWinner = (winner) => {
-  msg.innerText = `Congratulations, Winner is ${winner}`;
-  msgContainer.classList.remove("hide");
-  disableBoxes();
-};
-
-const checkWinner = () => {
-  for (let pattern of winPatterns) {
-    let pos1Val = boxes[pattern[0]].innerText;
-    let pos2Val = boxes[pattern[1]].innerText;
-    let pos3Val = boxes[pattern[2]].innerText;
-
-    if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
-      if (pos1Val === pos2Val && pos2Val === pos3Val) {
-        showWinner(pos1Val);
-        return true;
-      }
+function checkWin(currentPlayer) {
+    for(let i = 0; i < winning_combinations.length; i++){
+        const [a, b, c] = winning_combinations[i];
+        if(squares[a].textContent === currentPlayer && squares[b].textContent === currentPlayer && squares[c].textContent === currentPlayer){
+            return true;
+        }
     }
-  }
-};
+    return false;
+}
 
-newGameBtn.addEventListener("click", resetGame);
-resetBtn.addEventListener("click", resetGame);
+function restartButton() {
+    for(let i = 0; i < squares.length; i++) {
+        squares[i].textContent = "";
+    }
+    endMessage.textContent = `Your turn!`;
+    currentPlayer = players[0];
+    turnCount = 0;
+}
